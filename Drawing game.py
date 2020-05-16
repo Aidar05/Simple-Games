@@ -1,9 +1,9 @@
-# Импорт библиотеки
+# Import
 import pygame
-# Инициализация
+# initialization of pygame
 pygame.init()
 
-# Цвета в RGB.
+# colors in RGB
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
@@ -17,72 +17,57 @@ ORANGE = (255, 91, 0)
 LIGHT_BLUE = (0, 191, 255)
 PINK = (255, 20, 147)
 
-# Параметры квадрата
-margin = 1    # Расстояние между квадратами
-square_width, square_height = 15, 15    # Высота и ширина квадратов
-square_color = BLUE    # Цвет квадрата по умолчанию
-square_count_horizontal, square_count_vertical = 60, 35    # кол-во квадратов по горизонтали и вертикали
+# square parameters(those squares is fielg for draw)
+margin = 1    # Distance between fields for drawing
+square_width, square_height = 15, 15    # Height and width of squares
+square_color = BLUE    # Default square color
+square_count_horizontal, square_count_vertical = 60, 35    # squares count in horizontal and vertical
 
-# Все что связано с цветами(почти)
-colors_count = 12    # Количество цветов
-# Цвета в которые можно окрасить квадрат
+# Anything to do with the colors
+colors_count = 12    # colors count
+# colors for fill a square
 colors = (WHITE, RED, GREEN, BLUE, YELLOW, BROWN, PURPLE, GRAY, ORANGE, LIGHT_BLUE, PINK, BLACK)
-current_color = WHITE
+current_color = WHITE    
 
-# Окно
-display_width = square_count_horizontal * (margin + square_width) + margin    # Ширина окна
-display_height = square_count_vertical * (margin + square_height)+margin + 20   # Высота экрана
+# display
+display_width = square_count_horizontal * (margin + square_width) + margin    # screen width
+display_height = square_count_vertical * (margin + square_height)+margin + 20   # screen height
 size = display_width, display_height
-display = pygame.display.set_mode(size)    # Рисуем это окно
+display = pygame.display.set_mode(size)   
 
-# Параметры тех кнопок
-rect_width = (display_width-margin*(colors_count+1)) // colors_count    # Ширина кнопки
+# parameters of buttons
+rect_width = (display_width-margin*(colors_count+1)) // colors_count    # button width
+rect_height = 20    # button height
+rect_color = WHITE    # default color
 
-rect_height = 20    # Высота кнопки
-rect_color = WHITE    # Цвет кнопки по умолчанию
+# y coordinate button location(diapason)
+y_start = display_height-(rect_height+margin)    #    diapasons start         
+y_end = display_height-margin    # diapason end
 
-# Диапозон от начала до конца высоты прямоугольника по н координате на плоскости
-y_start = display_height-(rect_height+margin)    # Начало диапохона
-y_end = display_height-margin    # Конец диапозона
-
-# Координаты тех кнопок
-    # Диапозон координат кнопки отвечающей за белый цвет
+# Coordinates of every single button
+# the first nailed list contains an x-coordinate range. the second nailed list contains an y-coordinate range. 
 rect_white_pos = [
-    # Диапозон по оси х, первое значение начало диапозона, второе конец диапозона
     [margin, rect_width+margin],
-    # Диапозон по оси у, первое значение начало диапозона, второе конец диапозона
     [y_start, y_end]
         ]
 
-    # Диапозон координат кнопки отвечающей за красный цвет
 rect_red_pos = [
-    # Диапозон по оси х, первое значение начало диапозона, второе конец диапозона
     [rect_width+(margin*2), 2*rect_width+(margin*2)],
-    # Диапозон по оси у, первое значение начало диапозона, второе конец диапозона
     [y_start, y_end]
         ]
 
-    # Диапозон координат кнопки отвечающей за зеленый цвет
 rect_green_pos = [
-    # Диапозон по оси х, первое значение начало диапозона, второе конец диапозона
     [rect_width*2+(margin*3), rect_width*3+(margin*3)],
-    # Диапозон по оси у, первое значение начало диапозона, второе конец диапозона
     [y_start, y_end]
         ]
 
-    # Диапозон координат кнопки отвечающей за синий цвет
 rect_blue_pos = [
-    # Диапозон по оси х, первое значение начало диапозона, второе конец диапозона
     [rect_width*3+(margin*4), rect_width*4+(margin*4)],
-    # Диапозон по оси у, первое значение начало диапозона, второе конец диапозона
     [y_start, y_end]
         ]
 
-    # Диапозон координат кнопки отвечающей за желтый цвет
 rect_yellow_pos = [
-    # Диапозон по оси х, первое значение начало диапозона, второе конец диапозона
     [rect_width*4+(margin*5), rect_width*5+(margin*5)],
-    # Диапозон по оси у, первое значение начало диапозона, второе конец диапозона
     [y_start, y_end]
         ]
 
@@ -121,57 +106,59 @@ rect_black_pos = [
     [y_start, y_end]
 ]
 
-# Модель поля
+# The board
 board = [[0]*square_count_horizontal for i in range(square_count_vertical)]
 
 
-# Игровой цикл
+# gameplay loop
 while True:
-    # Получаем из стека содержащий события последнее событие
+    # Check for last event
     for event in pygame.event.get():
-        # Случай когда нажали на крестик кнопкой мыши
+        # The case where user click on a red cross 
         if event.type == pygame.QUIT:
-            quit()    # Прекратить выполнение программы
+            quit()    # stop running the code
 
-        # Случай когда событие есть нажатие на кнопку мыши
+        # The case when the event is a click on the mouse button
         if event.type == pygame.MOUSEBUTTONDOWN:
-            # Получение инфы насчет места нажатия на кнопку мыши
-            x_mouse_pos, y_mouse_pos = pygame.mouse.get_pos()    # Координаты точки, куда нажать кнопкой мыши
-            # Узнать на какой именно квадрат юзер нажал
-            sqrt_mouse_row = y_mouse_pos // (square_height + margin)    # Строка
-            sqrt_mouse_column = x_mouse_pos // (square_width + margin)    # Столбец
+            # getting info about that click
+            x_mouse_pos, y_mouse_pos = pygame.mouse.get_pos()    # coordinates of of pressed plase on the board
+            # Find out which square the Users clicked on
+            sqrt_mouse_row = y_mouse_pos // (square_height + margin)    # row
+            sqrt_mouse_column = x_mouse_pos // (square_width + margin)    # column
+            # find out which button the user clicked on
             button_mouse_row = -1
             button_mouse_column = x_mouse_pos // (rect_width + margin)
 
-            # Будет работать толко если это левая кнопка мыши
+            # It will only work if pressed button is the left mouse button.
             if event.button == 1:
                 if y_mouse_pos not in range(0, display_height-(margin+rect_height)):
 
-                    # Это ответвление кода работает если нажали на белую кнопку
+                    # This code branch works if user pressed the white button
                     if x_mouse_pos in range(rect_white_pos[0][0], rect_white_pos[0][1]):
                         if y_mouse_pos in range(rect_white_pos[1][0], rect_white_pos[1][1]):
                             current_color = WHITE
 
-                    # Это ответвление кода работает если нажали на красную кнопку
+                    # This code branch works if user pressed the red button
                     elif x_mouse_pos in range(rect_red_pos[0][0], rect_red_pos[0][1]):
                         if y_mouse_pos in range(rect_red_pos[1][0], rect_red_pos[1][1]):
                             current_color = RED
 
-                    # Это ответвление кода работает если нажали на зеленую кнопку
+                    # This code branch works if user pressed the green button
                     elif x_mouse_pos in range(rect_green_pos[0][0], rect_green_pos[0][1]):
                         if y_mouse_pos in range(rect_green_pos[1][0], rect_green_pos[1][1]):
                             current_color = GREEN
 
-                    # Это ответвление кода работает если нажали на синию кнопку
+                    # This code branch works if user pressed the blue button
                     elif x_mouse_pos in range(rect_blue_pos[0][0], rect_blue_pos[0][1]):
                         if y_mouse_pos in range(rect_blue_pos[1][0], rect_blue_pos[1][1]):
                             current_color = BLUE
 
-                    # Это ответвление кода работает если нажали на желтую кнопку
+                    # This code branch works if user pressed the yellow button
                     elif x_mouse_pos in range(rect_yellow_pos[0][0], rect_yellow_pos[0][1]):
                         if y_mouse_pos in range(rect_yellow_pos[1][0], rect_yellow_pos[1][1]):
                             current_color = YELLOW
-
+                    
+                    # This code branch works if user pressed the brown button 
                     elif x_mouse_pos in range(rect_brown_pos[0][0], rect_brown_pos[0][1]):
                         if y_mouse_pos in range(rect_brown_pos[1][0], rect_brown_pos[1][1]):
                             current_color = BROWN
@@ -179,56 +166,63 @@ while True:
                     elif x_mouse_pos in range(rect_purple_pos[0][0], rect_purple_pos[0][1]):
                         if y_mouse_pos in range(rect_purple_pos[1][0], rect_purple_pos[1][1]):
                             current_color = PURPLE
-
+                            
+                    # This code branch works if user pressed the gray button
                     elif x_mouse_pos in range(rect_gray_pos[0][0], rect_gray_pos[0][1]):
                         if y_mouse_pos in range(rect_gray_pos[1][0], rect_gray_pos[1][1]):
                             current_color = GRAY
 
+                    # This code branch works if user pressed the orange button
                     elif x_mouse_pos in range(rect_orange_pos[0][0], rect_orange_pos[0][1]):
                         if y_mouse_pos in range(rect_orange_pos[1][0], rect_orange_pos[1][1]):
                             current_color = ORANGE
 
+                    # This code branch works if user pressed the LightBlue button
                     elif x_mouse_pos in range(rect_LightBlue_pos[0][0], rect_LightBlue_pos[0][1]):
                         if y_mouse_pos in range(rect_LightBlue_pos[1][0], rect_LightBlue_pos[1][1]):
                             current_color = LIGHT_BLUE
-
+                            
+                    # This code branch works if user pressed the pink button  
                     elif x_mouse_pos in range(rect_pink_pos[0][0], rect_pink_pos[0][1]):
                         if y_mouse_pos in range(rect_pink_pos[1][0], rect_pink_pos[1][1]):
                             current_color = PINK
 
+                    # This code branch works if user pressed the black button
                     elif x_mouse_pos in range(rect_pink_pos[0][0], rect_black_pos[0][1]):
                         if y_mouse_pos in range(rect_black_pos[1][0], rect_black_pos[1][1]):
                             current_color = BLACK
 
-                    # Это на всякий случай чтобы не было неожиданной ошибки
+                    # It's just in case there's not an unexpected mistake.
                     else:
                         pass
-
+                    
+                # when user clicks on squares(not the buttons)
                 elif y_mouse_pos in range(0, display_height - (margin + rect_height)):
                     try:
+                        # the numbers indicates the color of a square
                         if current_color == WHITE:
-                            board[sqrt_mouse_row][sqrt_mouse_column] = 0
+                            board[sqrt_mouse_row][sqrt_mouse_column] = 0    # zero indicates the white color
 
-                        elif current_color == RED:
-                            board[sqrt_mouse_row][sqrt_mouse_column] = 1
-
+                        elif current_color == RED: 
+                            board[sqrt_mouse_row][sqrt_mouse_column] = 1    # 1 indicates the red color
+                     
                         elif current_color == GREEN:
-                            board[sqrt_mouse_row][sqrt_mouse_column] = 2
+                            board[sqrt_mouse_row][sqrt_mouse_column] = 2    # 2 indicates the green color
 
                         elif current_color == BLUE:
-                            board[sqrt_mouse_row][sqrt_mouse_column] = 3
+                            board[sqrt_mouse_row][sqrt_mouse_column] = 3    # 3 indicates the blue color 
 
                         elif current_color == YELLOW:
-                            board[sqrt_mouse_row][sqrt_mouse_column] = 4
+                            board[sqrt_mouse_row][sqrt_mouse_column] = 4    # 4 indicates the yellow color
 
                         elif current_color == BROWN:
-                            board[sqrt_mouse_row][sqrt_mouse_column] = 5
+                            board[sqrt_mouse_row][sqrt_mouse_column] = 5    # 5 indicates the brown color
 
                         elif current_color == PURPLE:
-                            board[sqrt_mouse_row][sqrt_mouse_column] = 6
+                            board[sqrt_mouse_row][sqrt_mouse_column] = 6    # 6 indicates the purple color
 
                         elif current_color == GRAY:
-                            board[sqrt_mouse_row][sqrt_mouse_column] = 7
+                            board[sqrt_mouse_row][sqrt_mouse_column] = 7    # etc
 
                         elif current_color == ORANGE:
                             board[sqrt_mouse_row][sqrt_mouse_column] = 8
@@ -251,9 +245,9 @@ while True:
                 else:
                     pass
 
-    # Рисование поля, рисование всех этих квадратов
-    for row in range(square_count_vertical):    # Столько раз, сколько должно быть строк
-        for column in range(square_count_horizontal):    # Колво итераций=колво столбцов
+    # Here is a drawing
+    for row in range(square_count_vertical):    # rows count
+        for column in range(square_count_horizontal):    # columns count
             if board[row][column] == 0:
                 square_color = WHITE
             elif board[row][column] == 1:
@@ -281,21 +275,21 @@ while True:
             else:
                 pass
 
-            # А здесь само рисование
-            square_x = column * square_width + (column+1)*margin    # Определяется х координата квадрата
-            square_y = row*square_height + (row+1)*margin    # Определяется у координата квадрата
-            # Неоднократное рисование квадрата, с определенными параметрами и координатами
+            # drawing the field
+            square_x = column * square_width + (column+1)*margin    
+            square_y = row*square_height + (row+1)*margin   
+            # drawing
             pygame.draw.rect(display, square_color, (square_x, square_y, square_width, square_height))
-        # Обновить экран чтобы пользователь выдел изменения экрана
+        # update screen
         pygame.display.update()
 
-    # Здесь рисование тех прямоугольных кнопок отвечающих за переокрас квадратов в определенные цвета
+    # buttons
     for column in range(colors_count):
-        x = column*rect_width + (margin*(column + 1))    # х координата этой кнопок
-        y = display_height - rect_height     # у координата этой кнопки
-        # Определение цвета самой этой кнопки для хорошого воспринимания и понимания что делает эта кнопка
+        x = column*rect_width + (margin*(column + 1))    # All u need to know-it works    
+        y = display_height - rect_height     
+        # that button's color
         rect_color = colors[column]
-        # Рисование этих кнопок
+        # drawing those buttons
         pygame.draw.rect(display, rect_color, (x, y, rect_width, rect_height))
-        # Обновить экран
+        # update the screen
         pygame.display.update()
