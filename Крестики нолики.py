@@ -1,6 +1,4 @@
-# Импорт библиотеки
 import pygame
-# Инициализация
 pygame.init()
 
 
@@ -27,36 +25,30 @@ def check_for_win(massive, symbol):
     else:
         return False
 
-
-# Цвета в RGB.
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-# Параметры квадратов
 margin = 5    # Отступ между квадратами
 square_width, square_height = 100, 100    # Длина и ширина
 square_color = WHITE
 squares_count_horizontal, squares_count_vertical = 3, 3    # Кол-во квадратов
 
-# Окно.
 screen_width = squares_count_horizontal*(square_width+margin) + margin    # Ширина экрана
 screen_height = squares_count_vertical*(square_height+margin) + margin    # Высота экрана
 size = screen_width, screen_height    # переменная, размеры окна
 screen = pygame.display.set_mode(size)    # Окно создается
 
-# Поле
 board = [[0 for i in range(3)] for j in range(3)]
 
-# Очередь кого-то
 query = 0    # 0, 1, 2, 3, 4, 5, 6
+
 color = WHITE
 
 game_over = False
 
-# Игровой цикл
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
