@@ -45,7 +45,6 @@ y_start = display_height-(rect_height+margin)    #    diapasons start
 y_end = display_height-margin    # diapason end
 
 # Coordinates of every single button
-# the first nailed list contains an x-coordinate range. the second nailed list contains an y-coordinate range. 
 rect_white_pos = [
     [margin, rect_width+margin],
     [y_start, y_end]
@@ -196,7 +195,6 @@ while True:
                     else:
                         pass
                     
-                # when user clicks on squares(not the buttons)
                 elif y_mouse_pos in range(0, display_height - (margin + rect_height)):
                     try:
                         # the numbers indicates the color of a square
@@ -245,7 +243,6 @@ while True:
                 else:
                     pass
 
-    # Here is a drawing
     for row in range(square_count_vertical):    # rows count
         for column in range(square_count_horizontal):    # columns count
             if board[row][column] == 0:
@@ -278,18 +275,13 @@ while True:
             # drawing the field
             square_x = column * square_width + (column+1)*margin    
             square_y = row*square_height + (row+1)*margin   
-            # drawing
             pygame.draw.rect(display, square_color, (square_x, square_y, square_width, square_height))
-        # update screen
         pygame.display.update()
 
-    # buttons
     for column in range(colors_count):
         x = column*rect_width + (margin*(column + 1))    # All u need to know-it works    
         y = display_height - rect_height     
         # that button's color
         rect_color = colors[column]
-        # drawing those buttons
         pygame.draw.rect(display, rect_color, (x, y, rect_width, rect_height))
-        # update the screen
         pygame.display.update()
