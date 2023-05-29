@@ -19,9 +19,9 @@ PINK = (255, 20, 147)
 
 # Параметры квадратиков(поле состоит из квадратиков)
 margin = 1    # Дистанция между квадратами
-square_width, square_height = 15, 15    # ширина и высота квадратов
+square_width, square_height = 30, 20    # ширина и высота квадратов
 square_color = BLUE    # Цвет квадратов по умолчанию
-square_count_horizontal, square_count_vertical = 60, 35    # Число квадратов по осям x, y
+square_count_horizontal, square_count_vertical = 20, 20    # Число квадратов по осям x, y
 
 # Все что связано с цветами
 colors_count = 12    # число цветов в общем
@@ -47,7 +47,7 @@ y_end = display_height-margin    # Конец диапозона
 
 # Двумерный список. В первом элементе находится диапозон в котором находиться кнопка по оси x. Второй элесент ось y
 rect_white_pos = [
-    [margin, rect_width+margin],
+    [margin, rect_width+margin], # i*rect_width+(margin*(i+1)), (rect_width*(i+1))+(margin*(i+1))
     [y_start, y_end]
         ]
 
@@ -105,6 +105,7 @@ rect_black_pos = [
     [rect_width*11+(margin*12), rect_width*12+(margin*11)],
     [y_start, y_end]
 ]
+
 
 # Матрица помагающая понять в какой цвет окрашивать определнный квадрат. Матрица заполнена нулями. Каждый элемент матрицы отвечает за какой-то квадрат на поле
 board = [[0]*square_count_horizontal for i in range(square_count_vertical)]
@@ -227,7 +228,6 @@ while True:
 
                         elif current_color == BLACK:
                             board[sqrt_mouse_row][sqrt_mouse_column] = 11
-
                         else:
                             pass
 
@@ -242,33 +242,9 @@ while True:
         for column in range(square_count_horizontal):    # Кол-во столбцов
             # Смотрим какой значение в матрице, в месте которое отвечает за именно этот квадрат и в зависимости от этого меняем текущий цыет
             # Если 0(Как в самом начале везде) то белый
-            if board[row][column] == 0:
-                square_color = WHITE
-            # Если цифра 1 на этом месте в массиве, то квадрат зарисуется красным
-            elif board[row][column] == 1:
-                square_color = RED
-            elif board[row][column] == 2:
-                square_color = GREEN
-            elif board[row][column] == 3:
-                square_color = BLUE
-            elif board[row][column] == 4:
-                square_color = YELLOW
-            elif board[row][column] == 5:
-                square_color = BROWN
-            elif board[row][column] == 6:
-                square_color = PURPLE
-            elif board[row][column] == 7:
-                square_color = GRAY
-            elif board[row][column] == 8:
-                square_color = ORANGE
-            elif board[row][column] == 9:
-                square_color = LIGHT_BLUE
-            elif board[row][column] == 10:
-                square_color = PINK
-            elif board[row][column] == 11:
-                square_color = BLACK
-            else:
-                pass
+            
+            # Цвет текущего квадрата в связи с знаеченим в матрице
+            square_color = colors[board[row][column]]
 
             # Рисование самого поля
             square_x = column * square_width + (column+1)*margin    # Координаты по оси х   
